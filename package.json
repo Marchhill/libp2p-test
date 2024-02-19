@@ -1,0 +1,17 @@
+{
+  "name": "libp2p-test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@chainsafe/libp2p-gossipsub": "^12.0.0",
+    "@libp2p/tcp": "^9.0.15",
+    "libp2p": "^1.2.3"
+  },
+  "type": "module"
+}
