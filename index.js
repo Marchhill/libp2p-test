@@ -1,9 +1,7 @@
 import { createLibp2p } from 'libp2p'
 import { tcp } from '@libp2p/tcp'
-// import { noise } from '@chainsafe/libp2p-noise'
-// import { yamux } from '@chainsafe/libp2p-yamux'
 import { gossipsub } from '@chainsafe/libp2p-gossipsub'
-import { identify } from '@chainsafe/libp2p-identify'
+import { identify } from '@libp2p/identify'
 import { multiaddr } from '@multiformats/multiaddr'
 import { bootstrap } from '@libp2p/bootstrap'
 
@@ -14,7 +12,6 @@ const keyperAddr1 = multiaddr('/ip4/64.227.125.94/tcp/23002/p2p/12D3KooWLmDDaCkX
 const keyperAddr2 = multiaddr('/ip4/64.227.125.94/tcp/23003/p2p/12D3KooW9y8s8gy52jHXvJXNU5D2HuDmXxrs5Kp4VznbiBtRUnU5');
 
 const node = await createLibp2p({
-    // libp2p nodes are started by default, pass false to override this
     start: false,
     addresses: {
       listen: [addr]
@@ -33,8 +30,6 @@ const node = await createLibp2p({
             tagTTL: 120000 // in ms
         })
     ]
-    // connectionEncryption: [noise()],
-    // streamMuxers: [yamux()]
 });
 
 // start libp2p
@@ -54,7 +49,6 @@ node.addEventListener('peer:connect', (evt) => {
 // });
 
 // node.services.pubsub.subscribe('decryptionKey');
-
 
 // update peer connections
 node.addEventListener('connection:open', () => {
