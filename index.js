@@ -4,8 +4,8 @@ import { gossipsub } from '@chainsafe/libp2p-gossipsub'
 import { identify } from '@libp2p/identify'
 import { multiaddr } from '@multiformats/multiaddr'
 import { bootstrap } from '@libp2p/bootstrap'
-// import { yamux } from '@chainsafe/libp2p-yamux'
-// import { noise } from '@chainsafe/libp2p-noise'
+import { yamux } from '@chainsafe/libp2p-yamux'
+import { noise } from '@chainsafe/libp2p-noise'
 
 const addr = multiaddr('/ip4/0.0.0.0/tcp/23199');
 const bootstrapAddr = multiaddr('/ip4/64.226.117.95/tcp/23000/p2p/12D3KooWDu1DQcEXyJRwbq6spG5gbi11MbN3iSSqbc2Z85z7a8jB');
@@ -19,9 +19,9 @@ const node = await createLibp2p({
       listen: [addr]
     },
     transports: [tcp()],
-    pubsub: [gossipsub()],
     services: {
-        identify: identify({protocolPrefix: "shutter/0.1.0"})
+        identify: identify({protocolPrefix: "shutter/0.1.0"}),
+        pubsub: gossipsub()
     },
     peerDiscovery: [
         bootstrap({
@@ -31,7 +31,11 @@ const node = await createLibp2p({
             tagValue: 50,
             tagTTL: 120000 // in ms
         })
-    ]
+    ],
+    streamMuxers: [
+        yamux()
+    ],
+    connectionEncryption: [noise()]
 });
 
 // start libp2p
@@ -43,14 +47,15 @@ node.addEventListener('peer:discovery', (evt) => {
 });
 
 node.addEventListener('peer:connect', (evt) => {
-    console.log('connected to peer: ' + evt.detail.id.toString())
+    // console.log('connected to peer: ' + evt.detail.id.toString())
+    console.log('connected to peer: ' + evt.detail);
 });
 
-// node.services.pubsub.addEventListener('decryptionKey', (message) => {
-//     console.log(`${message.detail.topic}:`, new TextDecoder().decode(message.detail.data))
-// });
+node.services.pubsub.addEventListener('message', (message) => {
+    console.log(`${message.detail.topic}:`, new TextDecoder().decode(message.detail.data))
+});
 
-// node.services.pubsub.subscribe('decryptionKey');
+node.services.pubsub.subscribe('decryptionKey');
 
 // update peer connections
 node.addEventListener('connection:open', () => {
