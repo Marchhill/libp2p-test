@@ -4,12 +4,14 @@ import { gossipsub } from '@chainsafe/libp2p-gossipsub'
 import { identify } from '@libp2p/identify'
 import { multiaddr } from '@multiformats/multiaddr'
 import { bootstrap } from '@libp2p/bootstrap'
+// import { yamux } from '@chainsafe/libp2p-yamux'
+// import { noise } from '@chainsafe/libp2p-noise'
 
 const addr = multiaddr('/ip4/0.0.0.0/tcp/23199');
-const bootstrapAddr = multiaddr('/ip4/64.227.125.94/tcp/23000/p2p/12D3KooWDu1DQcEXyJRwbq6spG5gbi11MbN3iSSqbc2Z85z7a8jB');
-const keyperAddr0 = multiaddr('/ip4/64.227.125.94/tcp/23001/p2p/12D3KooWFbscPyxc3rxyoEgyLbDYpbfx6s6di5wnr4cFz77q3taH');
-const keyperAddr1 = multiaddr('/ip4/64.227.125.94/tcp/23002/p2p/12D3KooWLmDDaCkXZgkWUnWZ1RxLzA1FHm4cVHLnNvCuGi4haGLu');
-const keyperAddr2 = multiaddr('/ip4/64.227.125.94/tcp/23003/p2p/12D3KooW9y8s8gy52jHXvJXNU5D2HuDmXxrs5Kp4VznbiBtRUnU5');
+const bootstrapAddr = multiaddr('/ip4/64.226.117.95/tcp/23000/p2p/12D3KooWDu1DQcEXyJRwbq6spG5gbi11MbN3iSSqbc2Z85z7a8jB');
+const keyperAddr0 = multiaddr('/ip4/64.226.117.95/tcp/23001/p2p/12D3KooWFbscPyxc3rxyoEgyLbDYpbfx6s6di5wnr4cFz77q3taH');
+const keyperAddr1 = multiaddr('/ip4/64.226.117.95/tcp/23002/p2p/12D3KooWLmDDaCkXZgkWUnWZ1RxLzA1FHm4cVHLnNvCuGi4haGLu');
+const keyperAddr2 = multiaddr('/ip4/64.226.117.95/tcp/23003/p2p/12D3KooW9y8s8gy52jHXvJXNU5D2HuDmXxrs5Kp4VznbiBtRUnU5');
 
 const node = await createLibp2p({
     start: false,
