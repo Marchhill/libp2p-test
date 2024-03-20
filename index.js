@@ -6,6 +6,8 @@ import { multiaddr } from '@multiformats/multiaddr'
 import { bootstrap } from '@libp2p/bootstrap'
 import { yamux } from '@chainsafe/libp2p-yamux'
 import { noise } from '@chainsafe/libp2p-noise'
+import * as fs from 'node:fs'
+import { warn } from 'node:console'
 
 const addr = multiaddr('/ip4/0.0.0.0/tcp/23199');
 const bootstrapAddr = multiaddr('/ip4/64.226.117.95/tcp/23000/p2p/12D3KooWDu1DQcEXyJRwbq6spG5gbi11MbN3iSSqbc2Z85z7a8jB');
@@ -51,11 +53,23 @@ node.addEventListener('peer:connect', (evt) => {
     console.log('connected to peer: ' + evt.detail);
 });
 
-node.services.pubsub.addEventListener('message', (message) => {
-    console.log(`${message.detail.topic}:`, new TextDecoder().decode(message.detail.data))
-});
+node.services.pubsub.subscribe('decryptionKeys');
 
-node.services.pubsub.subscribe('decryptionKey');
+let i = 0;
+node.services.pubsub.addEventListener('message', (message) => {
+    console.log(`${message.detail.topic}:`, message.detail.data.toString('hex'));
+    // node.services.pubsub.publish('decryptionKeys', message);
+    console.log("new message! " + i);
+    i++;
+    // fs.writeFile("tmp", message.detail.data, "binary", function(err) {
+    //     if (err) {
+    //         console.log(err);
+    //     }
+    //     else {
+    //         console.log("The file was saved!");
+    //     }
+    // });
+});
 
 // update peer connections
 node.addEventListener('connection:open', () => {
@@ -65,3 +79,8 @@ node.addEventListener('connection:open', () => {
 node.addEventListener('connection:close', () => {
     console.log("connection closed");
 });
+
+setInterval(async () => {
+    await node.services.pubsub.publish('decryptionKeys', [5, 3, 3]);
+    console.log('sent!');
+}, 5000)
